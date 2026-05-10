@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+	<meta name="theme-color" content="#0a0a0f">
+	<title>OffCom - Offline Bike Intercom</title>
+	<link rel="stylesheet" href="CSS/styles.css">
+</head>
+
+<body>
+
+	<!-- Header -->
+	<div class="header">
+		<div class="logo">
+			<div class="logo-icon">&#127908;</div>
+			<span>OffCom</span>
+		</div>
+		<div style="display:flex; align-items:center; gap:0.5rem;">
+			<div class="offline-badge">Offline</div>
+			<button class="btn btn-icon" onclick="openSettings()" title="Settings">&#9881;</button>
+		</div>
+	</div>
+
+	<!-- Main Content Container -->
+	<div class="content" id="mainContent">
+		<!-- Screens will be injected here dynamically -->
+		<div id="dynamicScreenContainer" class="screen"></div>
+	</div>
+
+	<!-- Global Audio Elements -->
+	<audio id="remoteAudio" autoplay playsinline></audio>
+
+	<!-- Global Overlays & Modals (injected lazily into #overlayContainer) -->
+	<div id="overlayContainer"></div>
+
+	<!-- Toast lives here — always needed immediately -->
+	<div class="toast" id="toast"></div>
+
+	<!-- QR Libraries -->
+	<script src="JS/lib/qrcode-generator.js"></script>
+	<script src="JS/lib/jsQR.js"></script>
+	<!-- OffCom modules -->
+	<script src="JS/state.js"></script>
+	<script src="JS/audio.js"></script>
+	<script src="JS/ui.js"></script>
+	<script src="JS/webrtc.js"></script>
+	<script src="JS/signaling.js"></script>
+	<script src="JS/room.js"></script>
+</body>
+
+</html>

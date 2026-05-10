@@ -1,0 +1,11 @@
+<div id="screenGuest" class="screen">
+	<div class="card">
+		<div class="card-title">Step 1: Scan Room QR</div>
+		<button class="btn btn-scan" onclick="openScanner()">📸 Scan Room QR</button>
+		<div class="divider"></div>
+		<p class="hint center">Or enter room ID manually:</p>
+		<input type="text" id="manualRoomId" placeholder="Enter 16-character room ID">
+		<button class="btn btn-primary" onclick="joinRoomManual()" style="margin-top: 0.75rem;">Join Room</button>
+	</div>
+	<button class="btn btn-secondary" onclick="goBack()" style="margin-top: 1rem;">← Back</button>
+</div>

@@ -1,0 +1,22 @@
+<div id="screenHost" class="screen">
+	<div class="card">
+		<div class="card-title">Step 1: Create Room</div>
+		<p class="hint">Generate a room QR for guests to scan.</p>
+		<button class="btn btn-primary" id="createOfferBtn" onclick="createHostRoom()">Create Room</button>
+	</div>
+	<div class="card hidden" id="qrDisplayCard">
+		<div class="card-title">Room QR Code</div>
+		<p class="hint center">Guests scan this to join</p>
+		<div class="qr-container" id="hostQRContainer"></div>
+		<div class="room-code" id="roomIdDisplay"></div>
+	</div>
+	<div class="card hidden" id="waitForGuestCard">
+		<div class="card-title">Waiting for Guests</div>
+		<p class="hint center">Guests should scan the QR code above</p>
+		<div class="spinner"></div>
+		<p class="hint center" style="margin-top: 1rem;" id="peerCountDisplay">No peers connected yet</p>
+		<button class="btn btn-primary" id="startCallBtn" onclick="startCallWithPeers()"
+			style="margin-top:1rem; display:none;">Start Call →</button>
+	</div>
+	<button class="btn btn-secondary" onclick="goBack()" style="margin-top: 1rem;">← Back</button>
+</div>

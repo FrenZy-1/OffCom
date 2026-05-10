@@ -1,0 +1,17 @@
+<div class="modal-overlay hidden" id="peerModalOverlay" style="z-index: 4000;">
+	<div class="peer-modal-content">
+		<div class="peer-modal-name" id="peerModalName">Rider Name</div>
+		<div style="display: flex; flex-direction: column; gap: 0.75rem;">
+			<!-- Local mute — available to everyone -->
+			<button class="btn btn-secondary" id="peerModalLocalMuteBtn" onclick="togglePeerMute()">🔇 Mute Locally</button>
+			<!-- Room-level controls — host only, hidden for guests -->
+			<div id="peerModalHostControls" style="display: flex; flex-direction: column; gap: 0.75rem;">
+				<div style="border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.7rem; color: var(--text-dim); text-align: center; letter-spacing: 0.05em; text-transform: uppercase;">Host Controls</div>
+				<button class="btn btn-warning" id="peerModalRoomMuteBtn" onclick="muteForRoom()">🔕 Mute for Room</button>
+				<button class="btn btn-danger" id="peerModalKickBtn" onclick="kickPeer()">Kick from Room</button>
+			</div>
+			<button class="btn btn-secondary" onclick="closePeerModal()"
+				style="background: transparent; border: none;">Cancel</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,106 @@
+<div id="screenCall" class="screen">
+	<!-- Room & Peers Card -->
+	<div class="card">
+		<div class="card-title">Room & Peers</div>
+		<div
+			style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+			<div style="flex: 1;">
+				<div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.25rem;">Your ID</div>
+				<div id="myIdDisplay"
+					style="font-weight: 800; color: var(--accent); font-size: 1.1rem; letter-spacing: 1px;">---</div>
+			</div>
+			<div style="display: flex; flex-direction: column; gap: 0.5rem;">
+				<button class="btn btn-icon" onclick="toggleQrPopup()" title="Show Room QR"
+					style="padding: 0.4rem;">🎫</button>
+				<button id="muteToggleBtn" class="btn btn-secondary"
+					style="width: auto; padding: 0.4rem 0.8rem; font-weight: bold;" onclick="toggleLocalMute()">Mic:
+					ON</button>
+			</div>
+		</div>
+		<div id="qrPopupCard" class="card hidden" style="margin-bottom: 1rem;">
+			<div class="card-title">Room QR Code</div>
+			<div class="qr-container" id="callQrContainer"></div>
+			<div class="room-code" id="callRoomCode"></div>
+			<button class="btn btn-secondary" onclick="toggleQrPopup()" style="margin-top:0.5rem;">Close</button>
+		</div>
+		<div class="peers-list" id="peersList"></div>
+		<div id="connState" style="color: var(--text-dim); font-size: 0.875rem; margin-top: 1rem; text-align: center;">
+			Waiting for connection...</div>
+		<div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+			<div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.5rem;">Manual Reconnect</div>
+			<div style="display: flex; gap: 0.5rem;">
+				<select id="reconnectDropdown"
+					style="flex: 1; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: 600;">
+					<option value="">Select peer...</option>
+				</select>
+				<button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem;"
+					onclick="manualReconnect()">↻ Reconnect</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- NEW: Chat Card -->
+	<div class="card">
+		<div class="card-title">Room Chat</div>
+		<div class="chat-container">
+			<div class="chat-messages" id="chatMessages"></div>
+			<div class="chat-input-row">
+				<input type="text" id="chatInput" placeholder="Send a message..." maxlength="300"
+					onkeypress="if(event.key==='Enter') sendChatMessage()"
+					oninput="document.getElementById('chatCharCount').textContent=this.value.length+'/300'">
+				<button onclick="sendChatMessage()">Send</button>
+			</div>
+			<div id="chatCharCount" style="font-size:0.7rem; color:var(--text-dim); text-align:right; margin-top:0.25rem;">0/300</div>
+		</div>
+	</div>
+
+	<!-- Transmit Mode Controls -->
+	<div class="card">
+		<div class="card-title">Transmit Mode</div>
+		<div class="transmit-buttons">
+			<button class="transmit-btn active" id="transmit-open" onclick="setTransmitMode('open')">Open</button>
+			<button class="transmit-btn" id="transmit-vox" onclick="setTransmitMode('vox')">VOX</button>
+			<button class="transmit-btn" id="transmit-ptt" onclick="setTransmitMode('ptt')">PTT</button>
+		</div>
+		<div class="vox-settings hidden" id="voxSettings">
+			<div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem;">
+				<span style="font-size: 0.75rem; color: var(--text-dim); white-space:nowrap;">Sensitivity</span>
+				<input type="range" id="voxThreshold" min="1" max="100" step="1" value="80"
+					style="flex: 1; accent-color: var(--accent);" oninput="updateVoxThreshold(this.value)">
+				<span id="voxThresholdValue"
+					style="font-size: 0.75rem; color: var(--text-dim); min-width:28px; text-align:right;">80%</span>
+			</div>
+			<div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem;">
+				<span style="font-size: 0.75rem; color: var(--text-dim); white-space:nowrap;">Hold time</span>
+				<input type="range" id="voxHoldTime" min="100" max="2000" step="100" value="600"
+					style="flex: 1; accent-color: var(--accent);" oninput="updateVoxHold(this.value)">
+				<span id="voxHoldValue"
+					style="font-size: 0.75rem; color: var(--text-dim); min-width:28px; text-align:right;">0.6s</span>
+			</div>
+			<div style="position:relative; margin-top:0.5rem;">
+				<div class="volume-meter-container">
+					<div class="volume-meter" id="volumeMeter"></div>
+				</div>
+				<div class="vox-threshold-marker" id="voxThresholdMarker"></div>
+			</div>
+		</div>
+		<div class="ptt-container hidden" id="pttContainer">
+			<div style="display: flex; align-items: stretch; gap: 0.75rem;">
+				<button class="btn btn-ptt" id="pttButton" onmousedown="pttStart(event)" onmouseup="pttStop(event)"
+					onmouseleave="pttStop(event)" ontouchstart="pttStart(event)" ontouchend="pttStop(event)"
+					ontouchcancel="pttStop(event)" style="flex: 1;">🎤 Push to Talk</button>
+				<button id="pttLatchBtn" class="btn btn-ptt"
+					style="width: auto; padding: 0 1.2rem; font-weight: bold; white-space: nowrap;"
+					onclick="togglePttLatchButton()">Latch: OFF</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="card hidden" id="reconnectCard">
+		<div class="card-title">Reconnecting...</div>
+		<p class="hint center">Connection lost. Attempting to reconnect...</p>
+		<div class="spinner"></div>
+		<p class="hint center" style="margin-top: 0.75rem; color: var(--yellow);" id="reconnectStatus">Attempt 1</p>
+	</div>
+	<button class="btn btn-danger" onclick="disconnect()" style="margin-top: 1rem;">End Session</button>
+</div>

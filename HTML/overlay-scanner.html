@@ -1,0 +1,11 @@
+<div class="scanner-overlay hidden" id="scannerOverlay">
+	<div class="scanner-header">Scan Room QR</div>
+	<div class="scanner-subtitle">Point camera at host's QR code</div>
+	<div class="scanner-viewport">
+		<video id="scannerVideo" playsinline></video>
+		<canvas id="scannerCanvas" style="display: none;"></canvas>
+		<div class="scanner-crosshair"></div>
+	</div>
+	<div class="scanner-status" id="scannerStatus">Scanning...</div>
+	<button class="scanner-close" onclick="closeScanner()">Cancel</button>
+</div>

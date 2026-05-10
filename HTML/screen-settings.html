@@ -1,0 +1,127 @@
+<div class="card">
+    <div class="card-title">Profile</div>
+    <div style="margin-bottom: 1rem;">
+        <label
+            style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);">Username</label>
+        <input type="text" id="settingsUsernameInput" onchange="updateUsername(this.value)" placeholder="Rider Name"
+            style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem;">
+    </div>
+    <div>
+        <label
+            style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-dim); cursor: pointer;">
+            <input type="checkbox" id="settingsDebugToggle" onchange="toggleDebugMode(this.checked)">
+            Enable System Debug Logging
+        </label>
+    </div>
+    <div>
+        <label
+            style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-dim); cursor: pointer; margin-top: 0.75rem;">
+            <input type="checkbox" id="settingsLogFileToggle" onchange="toggleFileLogging(this.checked)">
+            Save Logs to File
+        </label>
+        <button id="downloadLogsBtn" class="btn btn-secondary btn-small" onclick="downloadLogs()"
+            style="margin-top: 0.5rem; display: none; width: 100%;">⬇ Download .txt</button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Audio Controls</div>
+    <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);">Microphone
+            Gain</label>
+        <input type="range" id="settingsMicGain" min="0" max="3" step="0.1" value="1"
+            style="width: 100%; accent-color: var(--accent);" oninput="updateMicGain(this.value)">
+        <div
+            style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">
+            <span>0x</span>
+            <span id="settingsMicGainValue">1.0x</span>
+            <span>3x</span>
+        </div>
+    </div>
+    <div>
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);">Speaker
+            Volume</label>
+        <input type="range" id="settingsSpeakerGain" min="0" max="3" step="0.1" value="1"
+            style="width: 100%; accent-color: var(--accent);" oninput="updateSpeakerGain(this.value)">
+        <div
+            style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">
+            <span>0x</span>
+            <span id="settingsSpeakerGainValue">1.0x</span>
+            <span>3x</span>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Audio Device</div>
+    <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);">Microphone /
+            Input</label>
+        <select id="settingsAudioDeviceSelect"
+            style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem;">
+            <option value="">Default</option>
+        </select>
+        <button class="btn btn-secondary" onclick="applyAudioDevice()" style="margin-top:0.5rem; padding:0.6rem;">Apply
+            Mic</button>
+    </div>
+    <div id="settingsSpeakerSelectRow" style="display:none; margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-dim);">Speaker
+            Output</label>
+        <select id="settingsSpeakerSelect"
+            style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem;">
+            <option value="">Default</option>
+        </select>
+        <button class="btn btn-secondary" onclick="applySpeakerDevice()"
+            style="margin-top:0.5rem; padding:0.6rem;">Apply Speaker</button>
+    </div>
+    <div id="settingsSpeakerWarning"
+        style="font-size: 0.75rem; color: var(--yellow); margin-top: 0.25rem; display: none;">
+        ⚠️ Speaker selection not supported on Android/iOS — use system audio settings instead
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Sound Effects</div>
+    <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:1rem;">Upload .wav or .mp3 (stored locally)</p>
+
+    <div class="sound-item">
+        <span>Room Join</span>
+        <input type="file" id="soundJoinInput" accept="audio/*" onchange="handleSoundUpload('join', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('join')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('join')">↺</button>
+    </div>
+    <div class="sound-item">
+        <span>Room Leave</span>
+        <input type="file" id="soundLeaveInput" accept="audio/*" onchange="handleSoundUpload('leave', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('leave')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('leave')">↺</button>
+    </div>
+    <div class="sound-item">
+        <span>Peer Joined</span>
+        <input type="file" id="soundPeerJoinInput" accept="audio/*"
+            onchange="handleSoundUpload('peerJoin', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('peerJoin')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('peerJoin')">↺</button>
+    </div>
+    <div class="sound-item">
+        <span>Peer Left</span>
+        <input type="file" id="soundPeerLeaveInput" accept="audio/*"
+            onchange="handleSoundUpload('peerLeave', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('peerLeave')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('peerLeave')">↺</button>
+    </div>
+    <div class="sound-item">
+        <span>PTT Press</span>
+        <input type="file" id="soundPttOnInput" accept="audio/*" onchange="handleSoundUpload('pttOn', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('pttOn')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('pttOn')">↺</button>
+    </div>
+    <div class="sound-item">
+        <span>PTT Release</span>
+        <input type="file" id="soundPttOffInput" accept="audio/*" onchange="handleSoundUpload('pttOff', this.files[0])">
+        <button class="btn btn-small" onclick="previewSound('pttOff')">▶</button>
+        <button class="btn btn-small" onclick="resetSound('pttOff')">↺</button>
+    </div>
+</div>
+
+<button class="btn btn-primary" onclick="goBackFromSettings()">← Back</button>
