@@ -5,9 +5,10 @@ OffCom is a lightweight, browser-based tool for **fully offline communication**.
 
 
 ## Key Features  
-- **Fully Offline**: Host runs a WiFi hotspot without mobile data/internet; all communication stays local [1].  
+- **Fully Offline**: Host runs a WiFi hotspot without mobile data/internet; all communication stays local.  
 - **Long Range**: Operates on standard hotspot range (extends as far as your hotspot signal reaches).  
-- **No Special Hardware**: Works on any device with a browser (tested on Android Chrome) and basic hotspot capabilities.  
+- **No Special Hardware**: Works on any device with a browser (tested on Android Chrome) and basic hotspot capabilities.
+- **Mesh Architecutre**: Supports multiple guests with a full mesh connection.
 
 
 ## Limitations & Drawbacks  
@@ -31,9 +32,9 @@ python3 signaling_server.py
 ### Step 2: Connect Devices  
 1. **Host**: Enable WiFi Hotspot (no internet/mobile data needed).  
 2. **Guest**: Connect to the host’s hotspot.  
-3. **Both**: Open Chrome (other browsers may not work on Android) and navigate to:  
+3. **Both**: Open Chrome (other browsers may or may not work on Android) and navigate to:  
    `https://[host-phone-IP]:8443`  
-   *(Find your host’s IP in Termux with `ip addr show wlan0`, look for `inet ` followed by a number like `192.168.43.1`.)*  
+   *(Find your host’s IP in Termux with `ip addr show wlan0`, look for `inet ` followed by a number like `192.168.43.1`. OR, go into wifi settings on the guest phone and search for "Router IP" there.)*  
 
 
 ### Step 3: Start Communication [1]  
@@ -48,5 +49,5 @@ python3 signaling_server.py
 - **No Background Use**: Keep the Chrome tab open on both devices; closing it ends the call.  
 
 > [FYI]
-> This is a solid base. But a native app would be better instead of adding more features to this, so no update will be made here.
+> This is a solid base. But a native app would be better instead of adding more features to this, so no further updates will be made here.
 ---
