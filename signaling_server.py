@@ -170,6 +170,14 @@ def build_http_response(status, ctype, body):
 
 def serve_static_sync(path, writer):
     clean = urllib.parse.urlparse(path).path
+    if clean == "/stats"
+        total_rooms = len(rooms)
+        total_peers = 0
+        for room_id, rooms in rooms.items():
+            total_peers += len(room["peer"])
+        body = json.dump({"total_rooms": total_rooms, "total_peers": total_peers}).encode
+        write.write("200 OK", "application/json", body)
+        return 
     if clean in ("/", ""):
         clean = "/index.html"
     fpath = "." + clean
