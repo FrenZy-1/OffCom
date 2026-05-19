@@ -171,6 +171,7 @@ def build_http_response(status, ctype, body):
 def serve_static_sync(path, writer):
     clean = urllib.parse.urlparse(path).path
     if clean == "/stats":
+        global rooms
         total_rooms = len(rooms)
         total_peers = 0
         for room_id, rooms in rooms.items():
