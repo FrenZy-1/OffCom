@@ -176,7 +176,7 @@ def serve_static_sync(path, writer):
         total_peers = 0
         for room_id, rooms in rooms.items():
             total_peers += len(room["peer"])
-        body = json.dump({"total_rooms": total_rooms, "total_peers": total_peers}).encode()
+        body = json.dumps({"total_rooms": total_rooms, "total_peers": total_peers}).encode()
         write.write("200 OK", "application/json", body)
         return 
     if clean in ("/", ""):
