@@ -168,12 +168,24 @@ def build_http_response(status, ctype, body):
         f"Connection: close\r\n\r\n"
     ).encode() + body
 
-def serve_static_sync(path, writer, stats = None):
+def serve_static_sync(path, writer, room_snap = None):
     clean = urllib.parse.urlparse(path).path
     if clean == "/stats":
+        total_peers = sum(len(r["peers"]) for r in room_snap.values())
+        stats = {"total_rooms": len(rooms), "total_peers": total_peers}
         body = json.dumps(stats or {"total_rooms": 0, "total_peers": 0}).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return 
+    if clean == "/rooms":
+        result = {}
+        for room_id, room in room_snap.items():
+            peer_names = []
+            for peer in room["peers"].values():
+                peer_names.append(peer.name)
+            result[room_id] = {"peer_count": len(room["peers"]), "peers": peer_names}
+        body = json.dumps(result).encode()
+        writer.write(build_http_response("200 OK", "application/json", body))
+        return
     if clean in ("/", ""):
         clean = "/index.html"
     fpath = "." + clean
@@ -308,9 +320,7 @@ async def handle_connection(reader, writer):
         else:
             # Static file
             loop = asyncio.get_event_loop()
-            total_peers = sum(len(r["peers"]) for r in rooms.values())
-            stats = {"total_rooms": len(rooms), "total_peers": total_peers}
-            await loop.run_in_executor(None, serve_static_sync, path, writer, stats)
+            await loop.run_in_executor(None, serve_static_sync, path, writer, dict(rooms))
             await writer.drain()
 
     except Exception as e:
