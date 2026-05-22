@@ -187,7 +187,7 @@ def serve_static_sync(path, writer, room_snap = None):
         body = json.dumps(result).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return
-    if clean.startswith("/room/"):
+    if clean.startswith("/rooms/"):
         room_id = clean[6:]
         global pending_deletes
         pending_deletes.add(room_id)
@@ -359,9 +359,10 @@ async def cleanup_loop():
     while True:
         await asyncio.sleep(15)
         now = time.time()
-        async with rooms_lock:
-            rooms.pop(room_id, None)
-        pending_deletes.discard(room_id)
+        from room_id in list(pending_deletes):
+            async with rooms_lock:
+                rooms.pop(room_id, None)
+            pending_deletes.discard(room_id)
         async with rooms_lock:
             dead = []
             for rid, room in rooms.items():
