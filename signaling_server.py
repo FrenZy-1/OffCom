@@ -173,7 +173,7 @@ def serve_static_sync(path, writer, room_snap = None):
     clean = urllib.parse.urlparse(path).path
     if clean == "/stats":
         total_peers = sum(len(r["peers"]) for r in room_snap.values())
-        stats = {"total_rooms": len(rooms), "total_peers": total_peers}
+        stats = {"total_rooms": len(room_snap), "total_peers": total_peers}
         body = json.dumps(stats or {"total_rooms": 0, "total_peers": 0}).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return 
@@ -188,7 +188,7 @@ def serve_static_sync(path, writer, room_snap = None):
         writer.write(build_http_response("200 OK", "application/json", body))
         return
     if clean.startswith("/rooms/"):
-        room_id = clean[6:]
+        room_id = clean[7:]
         global pending_deletes
         pending_deletes.add(room_id)
         body = json.dumps({"deleted_room": room_id}).encode()
