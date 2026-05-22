@@ -308,7 +308,7 @@ async def handle_connection(reader, writer):
         else:
             # Static file
             loop = asyncio.get_event_loop()
-            total_peers = sum(len(r[peers]) for r in rooms.values())
+            total_peers = sum(len(r["peers"]) for r in rooms.values())
             stats = {"total_rooms": len(rooms), "total_peers": total_peers}
             await loop.run_in_executor(None, serve_static_sync, path, writer, stats)
             await writer.drain()
