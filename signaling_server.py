@@ -359,7 +359,7 @@ async def cleanup_loop():
     while True:
         await asyncio.sleep(15)
         now = time.time()
-        from room_id in list(pending_deletes):
+        for room_id in list(pending_deletes):
             async with rooms_lock:
                 rooms.pop(room_id, None)
             pending_deletes.discard(room_id)
