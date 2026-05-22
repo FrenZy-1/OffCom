@@ -187,7 +187,7 @@ def serve_static_sync(path, writer, room_snap = None):
         body = json.dumps(result).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return
-    if clean.startswith("/room/")
+    if clean.startswith("/room/"):
         room_id = clean[6:]
         global pending_deletes
         pending_deletes.add(room_id)
