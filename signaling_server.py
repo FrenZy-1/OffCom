@@ -20,8 +20,9 @@ WS_PATH = "/ws"
 DEBUG   = True
 
 # ── Shared state ─────────────────────────────────────────────────────────────
-rooms      = {}   # room_id → { "peers": { peer_id → PeerState }, "leave": bool }
-rooms_lock = None # asyncio.Lock() created inside main()
+rooms      = {}         # room_id → { "peers": { peer_id → PeerState }, "leave": bool }
+rooms_lock = None       # asyncio.Lock() created inside main()
+pending_deletes = set() # DELETE /rooms/[room_id] helper
 
 def log(*a):
     if DEBUG:
@@ -184,6 +185,13 @@ def serve_static_sync(path, writer, room_snap = None):
                 peer_names.append(peer.name)
             result[room_id] = {"peer_count": len(room["peers"]), "peers": peer_names}
         body = json.dumps(result).encode()
+        writer.write(build_http_response("200 OK", "application/json", body))
+        return
+    if clean.startswith("/room/")
+        room_id = clean[6:]
+        global pending_deletes
+        pending_deletes.add(room_id)
+        body = json.dumps({"deleted_room": room_id}).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return
     if clean in ("/", ""):
@@ -351,6 +359,9 @@ async def cleanup_loop():
     while True:
         await asyncio.sleep(15)
         now = time.time()
+        async with rooms_lock:
+            rooms.pop(room_id, None)
+        pending_deletes.discard(room_id)
         async with rooms_lock:
             dead = []
             for rid, room in rooms.items():
