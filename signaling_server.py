@@ -168,15 +168,10 @@ def build_http_response(status, ctype, body):
         f"Connection: close\r\n\r\n"
     ).encode() + body
 
-def serve_static_sync(path, writer):
+def serve_static_sync(path, writer, stats = None):
     clean = urllib.parse.urlparse(path).path
     if clean == "/stats":
-        global rooms
-        total_rooms = len(rooms)
-        total_peers = 0
-        for room_id, rooms in rooms.items():
-            total_peers += len(room["peer"])
-        body = json.dumps({"total_rooms": total_rooms, "total_peers": total_peers}).encode()
+        body = json.dumps(stats or {"total_rooms": 0, "total_peers": 0}).encode()
         writer.write(build_http_response("200 OK", "application/json", body))
         return 
     if clean in ("/", ""):
@@ -313,7 +308,9 @@ async def handle_connection(reader, writer):
         else:
             # Static file
             loop = asyncio.get_event_loop()
-            await loop.run_in_executor(None, serve_static_sync, path, writer)
+            total_peers = sum(len(r[peers]) for r in rooms.values())
+            stats = {"total_rooms": len(rooms), "total_peers": total_peers}
+            await loop.run_in_executor(None, serve_static_sync, path, writer, stats)
             await writer.drain()
 
     except Exception as e:
