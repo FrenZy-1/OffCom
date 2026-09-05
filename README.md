@@ -16,6 +16,14 @@ OffCom is a lightweight, browser-based tool for **fully offline communication**.
 - **Unencrypted**: Data transmission is not encrypted (avoid on public/untrusted networks).  
 
 
+## Preview
+<div style="display: flex;">
+   <img src="./public/images/1.webp" style="width: 200px;"></img>
+   <img src="./public/images/5.webp" style="width: 200px;"></img>
+   <img src="./public/images/8.webp" style="width: 200px;"></img>
+</div>
+
+
 ## Getting Started  
 ### Step 1: Set Up the Host Server (Termux Required)  
 OffCom needs an HTTPS server to run on Android (Chrome requires secure connections for local files). Use Termux to generate a certificate and start the server:  
